@@ -1,6 +1,6 @@
 # Bowling-Game
 
-Dieses Projekt ist eine Implementierung einer Bowling-Game unter Verwendung von Java und Spring Boot, entwickelt mit einem testgetriebenen Ansatz (TDD).
+Dieses Projekt ist eine Implementierung einer Bowling-Game unter Verwendung von Java und Spring Boot, entwickelt mit TDD und Clean Code Practices.
 
 ---
 
@@ -36,7 +36,7 @@ Der Entwicklungsprozess folgte den TDD-Prinzipien.
 
    * Test für ein **perfektes Spiel** (12 Strikes).
 
-3. **Vorlage hinzugefügt**
+3. **Dokumentation weitergeschreiben**
 
 ---
 
@@ -58,6 +58,9 @@ Bei mehr Zeit könnten folgende Verbesserungen umgesetzt werden:
 
 * Weitere **Integrationstests** schreiben.
 
+* Datenbank mit **Datenbankzugriffsdaten** in .env Datei
+
+* Weiterentwicklung vom **Frontend** mit React oder mit Thymeleaf
 
 ---
 
