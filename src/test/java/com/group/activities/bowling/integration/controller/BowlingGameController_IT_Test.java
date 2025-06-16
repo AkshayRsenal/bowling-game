@@ -26,10 +26,8 @@ public class BowlingGameController_IT_Test {
     @MockitoBean
     private BowlingGameService bowlingGameService;
 
-    // Initial Test method
     @Test
     void contextLoads() {
-        // This is a placeholder for the integration test.
         // Actual test logic will be implemented later.
     }
 
