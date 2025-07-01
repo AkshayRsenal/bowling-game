@@ -3,6 +3,8 @@ package com.group.activities.bowling.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.group.activities.bowling.shared.BowlingGameConstants;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Getter;
@@ -25,19 +27,19 @@ public class BowlingGame {
     private Long id; // TODO Implemtent a proper ID generation strategy
 
     private List<Integer> rolls = new ArrayList<>(21); // Maximum of 21 rolls in a game
-    private int rollIndex = 0;
+    private int rollIndex;
 
-    private static final String INVALIDPINS_STRING = "Pins that fall out must be between 0 and 10.";
+    private int score;
+
 
     public void roll(int pinsOut) {
         if (pinsOut < 0 || pinsOut > 10) {
-            throw new IllegalArgumentException(INVALIDPINS_STRING);
+            throw new IllegalArgumentException(BowlingGameConstants.INVALIDPINS_STRING);
         }
         rolls.add(rollIndex++, pinsOut);
     }
 
     public int getCurrentScore() {
-        int score = 0;
         int currentFrame = 0;
         for (int frameIndex = 0; frameIndex < 10 && currentFrame < rolls.size(); frameIndex++) {
             if (isSpare(currentFrame)) {

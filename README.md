@@ -12,7 +12,7 @@ Dieses Projekt ist eine Implementierung einer Bowling-Game unter Verwendung von 
 
 ---
 
-## Testgetriebene Entwicklung (TDD)
+## Test Driven Development (TDD)
 
 ### Vorgehensweise
 
