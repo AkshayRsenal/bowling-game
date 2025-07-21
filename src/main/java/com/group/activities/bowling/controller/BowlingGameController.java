@@ -9,11 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @Controller
-@NoArgsConstructor
-@AllArgsConstructor
 public class BowlingGameController {
 
-    private BowlingGameService bowlingGameService;
+    // private BowlingGameService bowlingGameService;
 
     @GetMapping("/")
     public String getHome() {
