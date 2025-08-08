@@ -6,11 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -38,12 +35,12 @@ public class RollTest {
     }
 
     @Test
-    public void whenInitRollBadParams_thenRollInvalid() {
+    public void whenInitRollHasBadParams_thenRollInvalid() {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            roll = new Roll(-1, 1, frame); // This code is expected to throw IllegalStateException
+            roll = new Roll(-1, 1, frame); // This code is expected to throw IllegalArgumentException
         });
 
-        assertThat(thrown.getMessage()).isEqualTo("Pins dropped out cannot be null");
+        assertThat(thrown.getMessage()).isEqualTo("Pins dropped out must be between 0 and 10");
     }
 
     @Test
@@ -71,8 +68,8 @@ public class RollTest {
     }
 
     @Test
-    public void whenNullFrame_IsOptionalEmpty() {
-        Frame associatedFrame = new Frame(500L, new ArrayList<>(), 1, 0, 0, bowlingGame);
+    public void whenNullFrame_thenIsOptionalEmpty() {
+        Frame associatedFrame = new Frame(500L, new ArrayList<Roll>(), 1, 0, 0, bowlingGame);
         roll.setFrame(associatedFrame);
 
         Optional<Frame> optionalFrame = Optional.ofNullable(roll.getFrame());

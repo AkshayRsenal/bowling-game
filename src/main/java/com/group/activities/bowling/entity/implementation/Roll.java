@@ -54,8 +54,17 @@ public class Roll implements IRoll {
 
     public Boolean validateRoll() {
         if (this.pinsDroppedOut < 0 || this.pinsDroppedOut > 10) {
-            throw new IllegalArgumentException("Pins dropped out cannot be null");
+            throw new IllegalArgumentException("Pins dropped out must be between 0 and 10");
         }
+
+        if (this.rollNumber < 1 || this.rollNumber > 3) {
+            throw new IllegalArgumentException("Roll number must be between 1 and 3");
+        }
+
+        if (this.frame.getRolls().size() >= 3) {
+            throw new IllegalArgumentException("A frame can only have a maximum of 3 rolls");
+        }
+
         return true;
     }
 }

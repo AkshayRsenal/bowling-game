@@ -20,13 +20,16 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
 @Setter
 @Getter
-@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@RequiredArgsConstructor
 @Table(name = "frames")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Frame implements IFrame {
@@ -34,7 +37,8 @@ public class Frame implements IFrame {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
+    @NonNull
     @OneToMany(mappedBy = "frame", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("rollNumber ASC")
     private List<Roll> rolls; // Each frame can have up to 2 rolls
@@ -45,20 +49,29 @@ public class Frame implements IFrame {
 
     private int bonusScore;
 
+    @NonNull
     @ManyToOne(targetEntity = BowlingGame.class)
     @JoinColumn(name = "bowling_game_id", nullable = false)
     private BowlingGame bowlingGame;
+
+    public Frame(List<Roll> rolls, int frameNumber, int score, int bonusScore, BowlingGame bowlingGame) {
+        this.rolls = rolls != null ? rolls : new ArrayList<>();
+        this.frameNumber = frameNumber;
+        this.score = score;
+        this.bonusScore = bonusScore;
+        this.bowlingGame = bowlingGame;
+        validateFrame();
+    }
 
     public Boolean validateFrame() {
         // Validate the frame based on the rules of bowling
         if (frameNumber < 1 || frameNumber > 10) {
             throw new IllegalArgumentException("Frame number must be between 1 and 10");
         }
-        if (rolls.size() > 2) {
-            throw new IllegalArgumentException("A frame can have a maximum of 2 rolls");
+        if (rolls.size() > 3) {
+            throw new IllegalArgumentException("A frame can have a maximum of 3 rolls");
         }
         return true;
     }
-    
 
 }

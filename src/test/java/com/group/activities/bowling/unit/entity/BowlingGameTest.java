@@ -27,7 +27,17 @@ public class BowlingGameTest {
         bowlingGame = new BowlingGame(id, frames, 0, GameStatus.IN_PROGRESS, GameType.BOWLING);
     }
 
- 
+    // @Test
+    // public void whenRollsAdded_thenAssertContains() {
+    //     // Example test case to check if rolls can be added
+    //     roll(3, 5, 6, 7, 8, 10);
+
+    //     assertThat(bowlingGame.getRolls())
+    //             .isNotNull()
+    //             .isNotEmpty()
+    //             .contains(5, 6);
+    // }
+
     @Test
     void whenNewGame_thenAssertGameInitialState() {
         assertThat(bowlingGame.getFrames()).isEmpty();

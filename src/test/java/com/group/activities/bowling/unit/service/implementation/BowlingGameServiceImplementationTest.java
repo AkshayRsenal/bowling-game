@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import com.group.activities.bowling.entity.implementation.BowlingGame;
 import com.group.activities.bowling.entity.implementation.Frame;
 import com.group.activities.bowling.service.implementation.BowlingGameServiceImplementation;
+import com.group.activities.bowling.service.implementation.BowlingSimulationServiceImplementation;
 import com.group.activities.bowling.shared.GameStatus;
 import com.group.activities.bowling.shared.GameType;
 
@@ -20,13 +21,14 @@ public class BowlingGameServiceImplementationTest {
 
     private BowlingGame bowlingGame;
 
+    private BowlingSimulationServiceImplementation bowlingSimulationServiceImplementation;
 
      @BeforeEach
     public void setUp() {
         // Initialize a new BowlingGame instance before each test
         bowlingGame = new BowlingGame(1L, new ArrayList<Frame>(), 0, GameStatus.IN_PROGRESS, GameType.BOWLING);
-        bowlingGameServiceImplementation = new BowlingGameServiceImplementation(bowlingGame);
-
+        bowlingGameServiceImplementation = new BowlingGameServiceImplementation(bowlingGame, null, null);
+        // Todo: Initialize the BowlingSimulationServiceImplementation with correct parameters
     }
 
     @Test

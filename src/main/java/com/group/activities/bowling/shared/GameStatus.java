@@ -1,6 +1,7 @@
 package com.group.activities.bowling.shared;
 
 public enum GameStatus {
+    CREATED("Is Created"),
     IN_PROGRESS("In Progress"),
     COMPLETED("Completed"),
     CANCELED("Canceled");

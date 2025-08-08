@@ -9,42 +9,43 @@ import com.group.activities.bowling.entity.implementation.Game;
 import com.group.activities.bowling.shared.GameStatus;
 import com.group.activities.bowling.shared.GameType;
 
-import lombok.Getter;
-import lombok.Setter;
+public class GameTest {
 
-@Getter
-@Setter
-public class GameTest extends Game {
+    private static class TestBowlingGame extends Game {
 
-    private GameStatus status;
-    private GameType gameType;
+        public TestBowlingGame(GameStatus status, GameType gameType) {
+            super(status, gameType);
+        }
 
+        @Override
+        public void startGame() {
+            setStatus(GameStatus.IN_PROGRESS);
+        }
 
-    GameTest() {
-        super(GameStatus.COMPLETED, GameType.BOWLING); //Default constructor for GameTest
+        @Override
+        public void finishGame() {
+            setStatus(GameStatus.COMPLETED);
+        }
     }
 
     @Test
-    @DisplayName("Prüfen, ob das Spiel gestartet wird")
-    public void startGame() {
-        setStatus(GameStatus.IN_PROGRESS);
+    @DisplayName("Prüfen, ob default Konstruktor funktioniert")
+    public void whenDefaultConstructor_thenHasCorrectValues() {
+        Game game = new TestBowlingGame(GameStatus.COMPLETED, GameType.BOWLING);
+        assertThat(game.getStatus()).isEqualTo(GameStatus.COMPLETED);
+        assertThat(game.getGameType()).isEqualTo(GameType.BOWLING);
     }
 
     @Test
-    @DisplayName("Prüfen, ob das Spiel beendet wird")
-    public void finishGame() {
-        // AI generated Logic to start the game
-        setStatus(GameStatus.COMPLETED);
+    @DisplayName("When game starts, then status changes to IN_PROGRESS")
+    public void whenGameStarts_thenStatusChanges() {
+        // Given
+        Game game = new TestBowlingGame(GameStatus.CREATED, GameType.BOWLING);
+
+        // When
+        game.startGame();
+
+        // Then
+        assertThat(game.getStatus()).isEqualTo(GameStatus.IN_PROGRESS);
     }
-
-    // @Test
-    // @DisplayName("Prüfen, ob default Konstruktor funktioniert")
-    // public void ifDefaultConstructorHasCorrectValues() {
-    //     GameTest game = new GameTest();
-    //     assertThat(game.getStatus()).isEqualTo(GameStatus.COMPLETED);
-    //     assertThat(game.getGameType()).isEqualTo(GameType.BOWLING);        
-    // }
-
-    
-
 }

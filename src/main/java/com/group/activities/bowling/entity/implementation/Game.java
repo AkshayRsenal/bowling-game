@@ -1,8 +1,5 @@
 package com.group.activities.bowling.entity.implementation;
 
-import java.util.List;
-import java.util.UUID;
-
 import com.group.activities.bowling.entity.IGame;
 import com.group.activities.bowling.shared.GameStatus;
 import com.group.activities.bowling.shared.GameType;

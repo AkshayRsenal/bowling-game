@@ -1,5 +1,7 @@
 package com.group.activities.bowling.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 public interface BowlingGameService {
     
     public void startNewGame();
@@ -8,7 +10,6 @@ public interface BowlingGameService {
     //     // AI generated Logic to record a roll in the current game
     // }
 
-    public int getCurrentScore();
-
+    public int getCurrentScore();   
 
 }
