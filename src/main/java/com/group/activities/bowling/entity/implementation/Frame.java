@@ -2,6 +2,7 @@ package com.group.activities.bowling.entity.implementation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.group.activities.bowling.entity.IFrame;
 
@@ -21,7 +22,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -29,7 +29,6 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 @Table(name = "frames")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Frame implements IFrame {
@@ -41,12 +40,11 @@ public class Frame implements IFrame {
     @NonNull
     @OneToMany(mappedBy = "frame", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("rollNumber ASC")
-    private List<Roll> rolls; // Each frame can have up to 2 rolls
+    private List<Roll> rolls = new ArrayList<>(); // Avoid null pointer exception by initializing
 
     private int frameNumber;
 
     private int score;
-
     private int bonusScore;
 
     @NonNull
@@ -54,7 +52,7 @@ public class Frame implements IFrame {
     @JoinColumn(name = "bowling_game_id", nullable = false)
     private BowlingGame bowlingGame;
 
-    public Frame(List<Roll> rolls, int frameNumber, int score, int bonusScore, BowlingGame bowlingGame) {
+    public Frame(List<Roll> rolls, int frameNumber, int score, int bonusScore, @NonNull BowlingGame bowlingGame) {
         this.rolls = rolls != null ? rolls : new ArrayList<>();
         this.frameNumber = frameNumber;
         this.score = score;
@@ -63,7 +61,16 @@ public class Frame implements IFrame {
         validateFrame();
     }
 
-    public Boolean validateFrame() {
+    /**
+     * Custom setter for frames with validation
+     */
+    public void setRolls(List<Roll> rolls) {
+        this.rolls = Optional.ofNullable(rolls)
+                .map(ArrayList::new)
+                .orElseGet(ArrayList::new);
+    }
+
+    public boolean validateFrame() {
         // Validate the frame based on the rules of bowling
         if (frameNumber < 1 || frameNumber > 10) {
             throw new IllegalArgumentException("Frame number must be between 1 and 10");

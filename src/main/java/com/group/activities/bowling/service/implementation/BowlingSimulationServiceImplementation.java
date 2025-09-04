@@ -31,7 +31,7 @@ public class BowlingSimulationServiceImplementation implements BowlingSimulation
         List<Frame> simulationFrames = new ArrayList<>();
         bowlingGame = new BowlingGame(simulationFrames, 0, GameStatus.IN_PROGRESS, GameType.BOWLING);
 
-        for (int frameNumber = 1; frameNumber <= BowlingGameConstants.TOTAL_FRAMES; frameNumber++) {
+        for (int frameNumber = 1; frameNumber <= BowlingGameConstants.MAX_FRAMES; frameNumber++) {
             List<Roll> rolls = new ArrayList<>();
             Frame frame = new Frame(rolls, frameNumber, 0, 0, bowlingGame);
             // bowlingGame.getFrames().add(frame);

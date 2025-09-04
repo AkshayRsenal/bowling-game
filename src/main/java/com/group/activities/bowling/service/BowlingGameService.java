@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public interface BowlingGameService {
     
+    public void validateBowlingGame();
+
     public void startNewGame();
     
     // public void roll(int pins) {

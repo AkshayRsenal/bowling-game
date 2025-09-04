@@ -21,21 +21,22 @@ public class FrameTest {
     private Frame frame;
     private Roll roll;
     private static final AtomicLong idGenerator = new AtomicLong(54L);
+    private List<Roll> rolls;
 
     @BeforeEach
     public void setUp() {
         // Initialize a new Frame instance before each test
-        List<Roll> rolls = new ArrayList<>();
+        rolls = new ArrayList<>();
         Long id = idGenerator.getAndIncrement();
         BowlingGame bowlingGame = new BowlingGame(id, new ArrayList<Frame>(), 0, GameStatus.IN_PROGRESS,
                 GameType.BOWLING);
-        frame = new Frame(new ArrayList<Roll>(), 1, 0, 0, bowlingGame);
+        frame = new Frame(rolls, 1, 0, 0, bowlingGame);
     }
 
     @Test
     public void whenSingleFrame_ThenCheckMaxRollsExceeded() {
 
-        Frame singleFrame = new Frame(new ArrayList<Roll>(), 1, 0, 0, frame.getBowlingGame());
+        Frame singleFrame = new Frame(rolls, 1, 0, 0, frame.getBowlingGame());
         singleFrame.getRolls().add(new Roll(5, 1, singleFrame));
         singleFrame.getRolls().add(new Roll(3, 2, singleFrame));
         singleFrame.getRolls().add(new Roll(3, 2, singleFrame));

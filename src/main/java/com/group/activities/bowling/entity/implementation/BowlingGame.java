@@ -2,6 +2,7 @@ package com.group.activities.bowling.entity.implementation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.group.activities.bowling.shared.GameStatus;
 import com.group.activities.bowling.shared.GameType;
@@ -16,14 +17,14 @@ import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "bowling-game")
 public class BowlingGame extends Game {
@@ -41,7 +42,7 @@ public class BowlingGame extends Game {
     @NonNull
     @OneToMany(mappedBy = "bowlingGame", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("frameNumber ASC")
-    private List<Frame> frames; // Maximum of 10 frames in a game
+    private List<Frame> frames = new ArrayList<>(); // Maximum of 10 frames in a game
 
     @NonNull
     private int totalScore;
@@ -52,13 +53,22 @@ public class BowlingGame extends Game {
     @NonNull
     private GameType gameType;
 
-    
-    // public BowlingGame(List<Frame> frames, int totalScore, GameStatus status, GameType gameType) {
-    //     this.frames = frames != null ? frames : new ArrayList<>();
-    //     this.totalScore = totalScore;
-    //     this.status = status;
-    //     this.gameType = gameType;
-    // }
+    /**
+     * Custom setter for frames with validation
+     */
+    public void setFrames(List<Frame> frames) {
+        this.frames = Optional.ofNullable(frames)
+                .map(ArrayList::new)
+                .orElseGet(ArrayList::new);
+    }
+
+    public BowlingGame(List<Frame> frames, int totalScore, GameStatus status, GameType gameType) {
+        setFrames(frames);
+        this.totalScore = totalScore;
+        this.status = status;
+        this.gameType = gameType;
+        validateBowlingGame();
+    }
 
     public void startGame() {
         this.status = GameStatus.IN_PROGRESS;
@@ -69,5 +79,39 @@ public class BowlingGame extends Game {
     public void finishGame() {
         this.status = GameStatus.COMPLETED;
     }
+
+    /**
+     * Validates the bowling game state
+     * @return true if the game is valid
+     * @throws IllegalStateException if game state is invalid
+     */
+    public boolean validateBowlingGame() {
+        // Validate frames
+        if (frames == null) {
+            throw new IllegalStateException("Frames list cannot be null");
+        }
+
+        // Validate game status
+        if (status == null) {
+            throw new IllegalStateException("Game status cannot be null");
+        }
+
+        // Validate game type
+        if (gameType == null) {
+            throw new IllegalStateException("Game type cannot be null");
+        }
+        
+        if (gameType != GameType.BOWLING) {
+            throw new IllegalStateException("Game type must be BOWLING");
+        }
+
+        // Validate score
+        if (totalScore < 0) {
+            throw new IllegalStateException("Total score cannot be negative");
+        }
+
+        return true;
+    }
+
 
 }
