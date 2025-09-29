@@ -1,12 +1,15 @@
 package com.group.activities.bowling.entity.implementation;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.group.activities.bowling.dto.FrameDto;
 import com.group.activities.bowling.entity.IFrame;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +21,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +31,7 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "frames")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -42,10 +46,14 @@ public class Frame implements IFrame {
     @OrderBy("rollNumber ASC")
     private List<Roll> rolls = new ArrayList<>(); // Avoid null pointer exception by initializing
 
+    @Column(name = "frame_number", nullable = false)
     private int frameNumber;
-
+    @Column(name = "score", nullable = false)
     private int score;
+    @Column(name = "bonus_score", nullable = false)
     private int bonusScore;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     @NonNull
     @ManyToOne(targetEntity = BowlingGame.class)
@@ -58,6 +66,7 @@ public class Frame implements IFrame {
         this.score = score;
         this.bonusScore = bonusScore;
         this.bowlingGame = bowlingGame;
+        this.createdAt = LocalDateTime.now();
         validateFrame();
     }
 
@@ -68,6 +77,29 @@ public class Frame implements IFrame {
         this.rolls = Optional.ofNullable(rolls)
                 .map(ArrayList::new)
                 .orElseGet(ArrayList::new);
+    }
+
+    /**
+     * Static factory method to create Roll from DTO
+     */
+    public static Frame createFromDto(FrameDto frameDto, List<Roll> rolls) {
+        if (frameDto.getBowlingGameId() == null) {
+            throw new IllegalArgumentException("BowlingGame ID cannot be null");
+        }
+
+        BowlingGame bowlingGame = new BowlingGame();
+        bowlingGame.setId(frameDto.getBowlingGameId());
+
+        return new Frame(
+                rolls,
+                frameDto.getFrameNumber(),
+                frameDto.getScore(),
+                frameDto.getBonusScore(),
+                bowlingGame);
+    }
+
+    public LocalDateTime getTimestamp() {
+        return createdAt;
     }
 
     public boolean validateFrame() {

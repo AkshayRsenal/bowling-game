@@ -13,9 +13,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
 @Entity
@@ -46,6 +49,13 @@ public class Roll implements IRoll {
         this.createdAt = LocalDateTime.now();
         this.frame = frame;
         validateRoll();
+    }
+
+    /**
+     * Static factory method to create Roll from DTO
+     */
+    public static Roll createFromDto(int pinsDroppedOut, int rollNumber, Frame frame) {
+        return new Roll(pinsDroppedOut, rollNumber, frame);
     }
 
     public LocalDateTime getTimestamp() {

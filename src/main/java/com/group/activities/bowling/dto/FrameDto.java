@@ -1,6 +1,8 @@
 package com.group.activities.bowling.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,10 +13,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RollDto {
+public class FrameDto {
     private Long id;
-    private int pinsDroppedOut;
-    private int rollNumber;
+    private List<RollDto> rolls = new ArrayList<>();
+    private int frameNumber;
+    private int score;
+    private int bonusScore;
     private LocalDateTime createdAt;
-    private Long frameId;
+    private Long bowlingGameId;
 }

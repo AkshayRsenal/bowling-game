@@ -26,11 +26,11 @@ public class RollTest {
 
     @BeforeEach
     public void setUp() {
-        List<Roll> rolls = new ArrayList<>();
-        Long id = idGenerator.getAndIncrement();
-        bowlingGame = new BowlingGame(id, new ArrayList<Frame>(), 0, GameStatus.IN_PROGRESS, GameType.BOWLING);
 
-        frame = new Frame(id, rolls, 1, 0, 0, bowlingGame);
+        List<Roll> rolls = new ArrayList<>();
+        bowlingGame = new BowlingGame(new ArrayList<Frame>(), 0, GameStatus.IN_PROGRESS, GameType.BOWLING);
+
+        frame = new Frame(rolls, 1, 0, 0, bowlingGame);
         roll = new Roll(5, 1, frame);
     }
 
@@ -54,28 +54,27 @@ public class RollTest {
 
     @Test
     public void whenAFrameAssociatesWithARoll_thenValidateFrameAndRoll() {
-        Frame associatedFrame = new Frame(500L, new ArrayList<Roll>(), 1, 0, 0, bowlingGame);
+        Frame associatedFrame = new Frame(new ArrayList<Roll>(), 1, 0, 0, bowlingGame);
         associatedFrame.getRolls().add(roll);
         associatedFrame.getRolls().add(new Roll(5, 1, associatedFrame));
 
         assertThat(associatedFrame.getRolls()).hasSize(2);
 
         assertThat(associatedFrame.getRolls().get(0).getPinsDroppedOut()).isEqualTo(5);
-        assertThat(associatedFrame.getRolls().get(0).getFrame().getId()).isEqualTo(35L);
+        // assertThat(associatedFrame.getRolls().get(0).getFrame().getId()).isEqualTo(35L);
 
         assertThat(associatedFrame.getRolls().get(1).getPinsDroppedOut()).isEqualTo(5);
-        assertThat(associatedFrame.getRolls().get(1).getFrame().getId()).isEqualTo(500L);
+        // assertThat(associatedFrame.getRolls().get(1).getFrame().getId()).isEqualTo(500L);
     }
 
     @Test
     public void whenNullFrame_thenIsOptionalEmpty() {
-        Frame associatedFrame = new Frame(500L, new ArrayList<Roll>(), 1, 0, 0, bowlingGame);
+        Frame associatedFrame = new Frame(new ArrayList<Roll>(), 1, 0, 0, bowlingGame);
         roll.setFrame(associatedFrame);
 
         Optional<Frame> optionalFrame = Optional.ofNullable(roll.getFrame());
 
         assertThat(associatedFrame.getFrameNumber()).isEqualTo(optionalFrame.get().getFrameNumber());
-        assertThat(optionalFrame.get().getId()).isEqualTo(500L);
     }
 
 }

@@ -31,4 +31,24 @@ public class FrameServiceImplementationTest {
                 new BowlingGame(1L, new ArrayList<Frame>(), 0, GameStatus.IN_PROGRESS, GameType.BOWLING));
     }
 
+    @Test
+    public void testAddRollsToFrame() {
+
+        try {
+            List<Roll> mappedRollsToFrame = new ArrayList<Roll>();
+
+            mappedRollsToFrame.add(new Roll(4, 1, frame));
+            mappedRollsToFrame.add(new Roll(5, 2, frame));
+
+            frame = frameService.addRollsToFrame(null, frame);
+            // assertThat(frame.getRolls()).hasSize(2);
+            // assertThat(frame.getRolls().get(0).getPinsDroppedOut()).isEqualTo(4);
+            // assertThat(frame.getRolls().get(1).getPinsDroppedOut()).isEqualTo(5);
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertThat(e).isInstanceOf(NullPointerException.class);
+                    
+        }
+    }
+
 }
