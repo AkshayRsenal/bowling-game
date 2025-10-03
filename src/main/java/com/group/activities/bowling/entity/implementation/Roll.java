@@ -51,29 +51,20 @@ public class Roll implements IRoll {
         validateRoll();
     }
 
-    /**
-     * Static factory method to create Roll from DTO
-     */
-    public static Roll createFromDto(int pinsDroppedOut, int rollNumber, Frame frame) {
-        return new Roll(pinsDroppedOut, rollNumber, frame);
-    }
-
     public LocalDateTime getTimestamp() {
         return createdAt;
     }
 
     public Boolean validateRoll() {
-        if (this.pinsDroppedOut < 0 || this.pinsDroppedOut > 10) {
+        if (pinsDroppedOut < 0 || pinsDroppedOut > 10) {
             throw new IllegalArgumentException("Pins dropped out must be between 0 and 10");
         }
 
-        if (this.rollNumber < 1 || this.rollNumber > 3) {
+        if (rollNumber < 1 || rollNumber > 3) {
             throw new IllegalArgumentException("Roll number must be between 1 and 3");
         }
 
-        if (this.frame.getRolls().size() >= 3) {
-            throw new IllegalArgumentException("A frame can only have a maximum of 3 rolls");
-        }
+        frame.validateFrame();
 
         return true;
     }

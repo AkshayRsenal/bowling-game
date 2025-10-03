@@ -1,11 +1,11 @@
 package com.group.activities.bowling.mapper;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import com.group.activities.bowling.dto.RollDto;
 import com.group.activities.bowling.entity.implementation.Frame;
 import com.group.activities.bowling.entity.implementation.Roll;
-import com.group.activities.bowling.repository.FrameRepository;
 
 import io.micrometer.common.lang.NonNull;
 import io.micrometer.common.lang.Nullable;
@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-
 public class RollMapper {
 
     // private final FrameRepository frameRepository;
@@ -47,21 +46,27 @@ public class RollMapper {
      */
     @NonNull
     public Roll toEntity(@NonNull RollDto rollDto, @NonNull Frame frame) {
-        return Roll.createFromDto(
+        Assert.notNull(rollDto, "[rollDto] must not be null when mapping to Roll entity");
+        Assert.notNull(frame, "[frame] must not be null when mapping to Roll entity");
+
+        return new Roll(
                 rollDto.getPinsDroppedOut(),
                 rollDto.getRollNumber(),
                 frame);
     }
 
-    // public void updateEntityFromDto(@NonNull Roll roll, @NonNull RollDto rollDto) {
-    //     roll.setPinsDroppedOut(rollDto.getPinsDroppedOut());
-    //     roll.setRollNumber(rollDto.getRollNumber());
+    // public void updateEntityFromDto(@NonNull Roll roll, @NonNull RollDto rollDto)
+    // {
+    // roll.setPinsDroppedOut(rollDto.getPinsDroppedOut());
+    // roll.setRollNumber(rollDto.getRollNumber());
 
-    //     if (rollDto.getFrameId() != null &&
-    //             (roll.getFrame() == null || !roll.getFrame().getId().equals(rollDto.getFrameId()))) {
-    //         Frame frame = frameRepository.findById(rollDto.getFrameId())
-    //                 .orElseThrow(() -> new IllegalArgumentException("Frame not found: " + rollDto.getFrameId()));
-    //         roll.setFrame(frame);
-    //     }
+    // if (rollDto.getFrameId() != null &&
+    // (roll.getFrame() == null ||
+    // !roll.getFrame().getId().equals(rollDto.getFrameId()))) {
+    // Frame frame = frameRepository.findById(rollDto.getFrameId())
+    // .orElseThrow(() -> new IllegalArgumentException("Frame not found: " +
+    // rollDto.getFrameId()));
+    // roll.setFrame(frame);
+    // }
     // }
 }

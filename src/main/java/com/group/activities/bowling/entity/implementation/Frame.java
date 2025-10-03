@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import com.group.activities.bowling.dto.FrameDto;
 import com.group.activities.bowling.entity.IFrame;
+import com.group.activities.bowling.shared.BowlingGameConstants;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -79,38 +80,53 @@ public class Frame implements IFrame {
                 .orElseGet(ArrayList::new);
     }
 
-    /**
-     * Static factory method to create Roll from DTO
-     */
-    public static Frame createFromDto(FrameDto frameDto, List<Roll> rolls) {
-        if (frameDto.getBowlingGameId() == null) {
-            throw new IllegalArgumentException("BowlingGame ID cannot be null");
-        }
+    // /**
+    //  * Static factory method to create Roll from DTO
+    //  */
+    // public static Frame createFromDto(FrameDto frameDto, List<Roll> rolls) {
+    //     if (frameDto.getBowlingGameId() == null) {
+    //         throw new IllegalArgumentException("BowlingGame ID cannot be null");
+    //     }
 
-        BowlingGame bowlingGame = new BowlingGame();
-        bowlingGame.setId(frameDto.getBowlingGameId());
+    //     BowlingGame bowlingGame = new BowlingGame();
+    //     bowlingGame.setId(frameDto.getBowlingGameId());
 
-        return new Frame(
-                rolls,
-                frameDto.getFrameNumber(),
-                frameDto.getScore(),
-                frameDto.getBonusScore(),
-                bowlingGame);
-    }
+    //     return new Frame(
+    //             rolls,
+    //             frameDto.getFrameNumber(),
+    //             frameDto.getScore(),
+    //             frameDto.getBonusScore(),
+    //             bowlingGame);
+    // }
 
     public LocalDateTime getTimestamp() {
         return createdAt;
     }
 
     public boolean validateFrame() {
-        // Validate the frame based on the rules of bowling
-        if (frameNumber < 1 || frameNumber > 10) {
+        if (frameNumber < 1 || frameNumber > BowlingGameConstants.MAX_ROLLS_LAST_FRAME) {
             throw new IllegalArgumentException("Frame number must be between 1 and 10");
         }
-        if (rolls.size() > 3) {
-            throw new IllegalArgumentException("A frame can have a maximum of 3 rolls");
+
+        int maxAllowedRolls = (frameNumber == BowlingGameConstants.MAX_ROLLS_LAST_FRAME)
+                ? BowlingGameConstants.MAX_ROLLS_LAST_FRAME
+                : BowlingGameConstants.MAX_ROLLS_PER_FRAME;
+        if (rolls.size() > maxAllowedRolls) {
+            throw new IllegalArgumentException(
+                    String.format("Frame %d can have maximum %d rolls", frameNumber, maxAllowedRolls));
         }
+
+        // Validate total pins (except for 10th frame)
+        if (frameNumber < BowlingGameConstants.MAX_ROLLS_LAST_FRAME) {
+            int totalPins = rolls.stream()
+                    .mapToInt(Roll::getPinsDroppedOut)
+                    .sum();
+            if (totalPins > BowlingGameConstants.MAX_PINS_PER_ROLL) {
+                throw new IllegalArgumentException(
+                        String.format("Total pins in frame %d cannot exceed %d", frameNumber, BowlingGameConstants.MAX_PINS_PER_ROLL));
+            }
+        }
+
         return true;
     }
-
 }

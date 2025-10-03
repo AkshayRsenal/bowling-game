@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.group.activities.bowling.controller.BowlingGameController;
 import com.group.activities.bowling.service.BowlingGameService;
 
+//Todo: Write integration tests for BowlingGameController
 // @WebMvcTest(BowlingGameController.class)
 // @AutoConfigureMockMvc
 // @DisplayName("When get mapping BowlingGameController")

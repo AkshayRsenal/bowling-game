@@ -2,11 +2,16 @@ package com.group.activities.bowling.service;
 
 import java.util.List;
 
+import com.group.activities.bowling.dto.FrameDto;
 import com.group.activities.bowling.entity.IRoll;
 import com.group.activities.bowling.entity.implementation.Frame;
 import com.group.activities.bowling.entity.implementation.Roll;
 
 public interface FrameService {
+
+    FrameDto getDtoFromFrame(Long id);
+
+    Frame getFrameFromDto(FrameDto dto);
 
     Boolean validateFrame(Frame frame);
 

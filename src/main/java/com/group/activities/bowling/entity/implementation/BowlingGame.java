@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.group.activities.bowling.dto.BowlingGameDto;
+import com.group.activities.bowling.shared.BowlingGameConstants;
 import com.group.activities.bowling.shared.GameStatus;
 import com.group.activities.bowling.shared.GameType;
 
@@ -44,7 +46,6 @@ public class BowlingGame extends Game {
     @OrderBy("frameNumber ASC")
     private List<Frame> frames = new ArrayList<>(); // Maximum of 10 frames in a game
 
-    @NonNull
     private int totalScore;
 
     @NonNull
@@ -82,36 +83,50 @@ public class BowlingGame extends Game {
 
     /**
      * Validates the bowling game state
+     * 
      * @return true if the game is valid
      * @throws IllegalStateException if game state is invalid
      */
     public boolean validateBowlingGame() {
-        // Validate frames
-        if (frames == null) {
-            throw new IllegalStateException("Frames list cannot be null");
+        // Validate frame count
+        if (frames.size() > BowlingGameConstants.MAX_FRAMES) {
+            throw new IllegalStateException("Cannot have more than " + BowlingGameConstants.MAX_FRAMES + " frames");
         }
 
-        // Validate game status
+        // Validate frame sequence
+        validateFrameSequence();
+
+        // Validate game status and type
         if (status == null) {
             throw new IllegalStateException("Game status cannot be null");
         }
 
-        // Validate game type
-        if (gameType == null) {
-            throw new IllegalStateException("Game type cannot be null");
-        }
-        
-        if (gameType != GameType.BOWLING) {
+        if (gameType == null || gameType != GameType.BOWLING) {
             throw new IllegalStateException("Game type must be BOWLING");
         }
 
         // Validate score
-        if (totalScore < 0) {
+        if (totalScore < BowlingGameConstants.MIN_SCORE) {
             throw new IllegalStateException("Total score cannot be negative");
         }
 
         return true;
     }
 
+    /**
+     * Validates that frames are in correct sequence (1-10)
+     * @throws IllegalStateException if frame sequence is invalid
+     */
+    private void validateFrameSequence() {
+        for (int i = 0; i < frames.size(); i++) {
+            Frame frame = frames.get(i);
+            int expectedFrameNumber = i + 1;
+            if (frame.getFrameNumber() != expectedFrameNumber) {
+                throw new IllegalStateException(
+                        String.format("Invalid frame sequence: expected frame %d but found frame %d",
+                                expectedFrameNumber, frame.getFrameNumber()));
+            }
+        }
+    }
 
 }
