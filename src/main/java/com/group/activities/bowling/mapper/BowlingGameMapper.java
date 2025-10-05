@@ -1,5 +1,6 @@
 package com.group.activities.bowling.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -10,6 +11,7 @@ import com.group.activities.bowling.entity.implementation.Frame;
 import com.group.activities.bowling.repository.BowlingGameRepository;
 
 import lombok.RequiredArgsConstructor;
+import io.micrometer.common.lang.NonNull;
 
 @Component
 @RequiredArgsConstructor
@@ -22,34 +24,44 @@ public class BowlingGameMapper {
             return null;
         }
 
-        BowlingGameDto dto = new BowlingGameDto();
-        dto.setId(bowlingGame.getId());
-        dto.setStatus(bowlingGame.getStatus().name());
-        dto.setGameType(bowlingGame.getGameType().name());
-        dto.setTotalScore(bowlingGame.getTotalScore());
+        BowlingGameDto bowlingGameDto = new BowlingGameDto(
+                bowlingGame.getId(),
+                new ArrayList<>(), // Frames to be set below    
+                bowlingGame.getTotalScore(),
+                bowlingGame.getStatus(),
+                bowlingGame.getGameType()
+        );  
 
         // Map frames
-        dto.setFrames(bowlingGame.getFrames().stream()
+        bowlingGameDto.setFrames(bowlingGame.getFrames().stream()
                 .map(frameMapper::toDto)
                 .toList());
 
-        return dto;
+        return bowlingGameDto;
     }
 
     // Todo: implement this method if needed
-    // public BowlingGame toEntity(BowlingGameDto bowlingGameDto, List<Frame> frames) {
-    //     if (bowlingGameDto == null) {
-    //         return null;
-    //     }
+    public BowlingGame toEntity(@NonNull BowlingGameDto bowlingGameDto) {
+        if (bowlingGameDto == null) {
+            return null;
+        }
 
-    //     // BowlingGame bowlingGame = BowlingGame.createFromDto(bowlingGameDto);
+        BowlingGame bowlingGame = new BowlingGame(
+                bowlingGameDto.getId(),
+                new ArrayList<>(), // Frames to be set below
+                bowlingGameDto.getTotalScore(),
+                bowlingGameDto.getStatus(),
+                bowlingGameDto.getGameType()
+        );
 
-    //     // Map frames
-    //     // if (bowlingGameDto.getFrames() != null) {
-    //     //     bowlingGame.setFrames(bowlingGameDto.getFrames().stream()
-    //     //             .map(frameDto -> frameMapper.toEntity(frameDto, null)) // Rolls set to null for now
-    //     //             .toList());
-    //     // }
+        // Map frames
+        if (bowlingGameDto.getFrames() != null) {
+            bowlingGame.setFrames(bowlingGameDto.getFrames().stream()
+                    .map(frameDto -> frameMapper.toEntity(frameDto, null)) // Rolls set to null for now
+                    .toList());
+        }
 
-    // }
+        return bowlingGame;
+
+    }
 }

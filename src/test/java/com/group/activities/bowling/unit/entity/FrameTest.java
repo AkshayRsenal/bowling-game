@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import com.group.activities.bowling.entity.implementation.BowlingGame;
 import com.group.activities.bowling.entity.implementation.Frame;
 import com.group.activities.bowling.entity.implementation.Roll;
+import com.group.activities.bowling.shared.BowlingGameConstants;
 import com.group.activities.bowling.shared.GameStatus;
 import com.group.activities.bowling.shared.GameType;
 
@@ -43,8 +44,8 @@ public class FrameTest {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             singleFrame.getRolls().add(new Roll(3, 3, singleFrame));
         });
-        // assertThat(thrown.getMessage()).isEqualTo("Frame %d can have maximum %d rolls", frameNumber, maxAllowedRolls);
-// Todo: verify message
+        assertThat(thrown.getMessage()).isEqualTo("Frame %d can have maximum %d rolls", singleFrame.getFrameNumber(), BowlingGameConstants.MAX_ROLLS_PER_FRAME);
+
     }
 
 }

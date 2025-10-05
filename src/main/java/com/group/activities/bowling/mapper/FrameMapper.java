@@ -52,7 +52,7 @@ public class FrameMapper {
                 frameDto.getFrameNumber(),
                 frameDto.getScore(),
                 frameDto.getBonusScore(),
-                bowlingGame); // BowlingGame to be set below
+                bowlingGame);
 
         // Map rolls
         if (frameDto.getRolls() != null) {

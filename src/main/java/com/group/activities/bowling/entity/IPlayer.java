@@ -6,12 +6,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Table(name = "employees")
-@Entity
-public class Player {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public interface IPlayer {
+    Long getId();
+    String getFirstName();
+    String getLastName();
+    String getEmail();
 
     // @Column(name = "first_name")
     // private String firstName;

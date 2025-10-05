@@ -64,7 +64,7 @@ public class BowlingGame extends Game {
     }
 
     public BowlingGame(List<Frame> frames, int totalScore, GameStatus status, GameType gameType) {
-        setFrames(frames);
+        this.frames = frames != null ? new ArrayList<>(frames) : new ArrayList<>();
         this.totalScore = totalScore;
         this.status = status;
         this.gameType = gameType;

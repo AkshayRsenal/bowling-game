@@ -104,7 +104,7 @@ public class Frame implements IFrame {
     }
 
     public boolean validateFrame() {
-        if (frameNumber < 1 || frameNumber > BowlingGameConstants.MAX_ROLLS_LAST_FRAME) {
+        if (frameNumber < 1 || frameNumber > BowlingGameConstants.MAX_FRAMES) {
             throw new IllegalArgumentException("Frame number must be between 1 and 10");
         }
 
