@@ -23,7 +23,6 @@ import lombok.NoArgsConstructor;
 public class FrameServiceImplementation implements FrameService {
 
     private Roll roll;
-
     private Frame frame;
     private BowlingGame bowlingGame;
     private FrameMapper frameMapper;
@@ -50,6 +49,14 @@ public class FrameServiceImplementation implements FrameService {
         // Save Rolls to the database
         frame.setRolls(rolls);
         return frame;
+    }
+
+    @Override
+    @Transactional
+    public FrameDto createFrameFromDto(FrameDto frameDto) {
+        Frame frame = getFrameFromDto(frameDto);
+        frameRepository.save(frame);
+        return frameDto; // Placeholder for validation logic
     }
 
     @Override

@@ -13,6 +13,8 @@ public interface FrameService {
 
     Frame getFrameFromDto(FrameDto dto);
 
+    FrameDto createFrameFromDto(FrameDto frameDto);
+
     Boolean validateFrame(Frame frame);
 
     int calculateFrameScore(Frame frame);
