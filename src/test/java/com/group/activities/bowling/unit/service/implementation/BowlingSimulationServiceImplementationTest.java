@@ -47,6 +47,7 @@ public class BowlingSimulationServiceImplementationTest {
         simulationFrames.stream().forEach(frame -> {
             assertThat(frame.getBowlingGame().getStatus()).isEqualTo(GameStatus.IN_PROGRESS);
             assertThat(frame.getBowlingGame().getGameType()).isEqualTo(GameType.BOWLING);
+            // Todo:checkerror
             assertThat(frame.getFrameNumber()).isEqualTo(frame.getRolls().get(0).getFrame().getFrameNumber());
         });
 

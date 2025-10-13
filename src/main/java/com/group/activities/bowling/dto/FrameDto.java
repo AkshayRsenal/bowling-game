@@ -15,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FrameDto {
     private Long id;
-    private List<RollDto> rolls = new ArrayList<>();
+    private List<RollDto> rolls;
     private int frameNumber;
     private int score;
     private int bonusScore;

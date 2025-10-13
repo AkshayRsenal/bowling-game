@@ -3,9 +3,7 @@ package com.group.activities.bowling.entity.implementation;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import com.group.activities.bowling.dto.FrameDto;
 import com.group.activities.bowling.entity.IFrame;
 import com.group.activities.bowling.shared.BowlingGameConstants;
 
@@ -42,10 +40,12 @@ public class Frame implements IFrame {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @NonNull
     @OneToMany(mappedBy = "frame", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("rollNumber ASC")
-    private List<Roll> rolls = new ArrayList<>(); // Avoid null pointer exception by initializing
+    private List<Roll> rolls;
 
     @Column(name = "frame_number", nullable = false)
     private int frameNumber;
@@ -61,8 +61,8 @@ public class Frame implements IFrame {
     @JoinColumn(name = "bowling_game_id", nullable = false)
     private BowlingGame bowlingGame;
 
-    public Frame(List<Roll> rolls, int frameNumber, int score, int bonusScore, @NonNull BowlingGame bowlingGame) {
-        this.rolls = rolls != null ? rolls : new ArrayList<>();
+    public Frame(List<Roll> rolls, int frameNumber, int score, int bonusScore, BowlingGame bowlingGame) {
+        this.rolls = rolls != null ? new ArrayList<>(rolls) : new ArrayList<>();
         this.frameNumber = frameNumber;
         this.score = score;
         this.bonusScore = bonusScore;
@@ -75,29 +75,18 @@ public class Frame implements IFrame {
      * Custom setter for frames with validation
      */
     public void setRolls(List<Roll> rolls) {
-        this.rolls = Optional.ofNullable(rolls)
-                .map(ArrayList::new)
-                .orElseGet(ArrayList::new);
+        this.rolls = rolls != null ? new ArrayList<>(rolls) : new ArrayList<>(); // Defensive Copy
     }
 
-    // /**
-    //  * Static factory method to create Roll from DTO
-    //  */
-    // public static Frame createFromDto(FrameDto frameDto, List<Roll> rolls) {
-    //     if (frameDto.getBowlingGameId() == null) {
-    //         throw new IllegalArgumentException("BowlingGame ID cannot be null");
-    //     }
-
-    //     BowlingGame bowlingGame = new BowlingGame();
-    //     bowlingGame.setId(frameDto.getBowlingGameId());
-
-    //     return new Frame(
-    //             rolls,
-    //             frameDto.getFrameNumber(),
-    //             frameDto.getScore(),
-    //             frameDto.getBonusScore(),
-    //             bowlingGame);
-    // }
+    /**
+     * Custom getter for frames with validation
+     */
+    public List<Roll> getRolls() {
+        if (rolls == null) {
+            rolls = new ArrayList<>();
+        }
+        return new ArrayList<>(rolls); // Defensive Copy
+    }
 
     public LocalDateTime getTimestamp() {
         return createdAt;
@@ -108,7 +97,7 @@ public class Frame implements IFrame {
             throw new IllegalArgumentException("Frame number must be between 1 and 10");
         }
 
-        int maxAllowedRolls = (frameNumber == BowlingGameConstants.MAX_ROLLS_LAST_FRAME)
+        int maxAllowedRolls = (frameNumber == BowlingGameConstants.MAX_FRAMES)
                 ? BowlingGameConstants.MAX_ROLLS_LAST_FRAME
                 : BowlingGameConstants.MAX_ROLLS_PER_FRAME;
         if (rolls.size() > maxAllowedRolls) {
@@ -117,13 +106,14 @@ public class Frame implements IFrame {
         }
 
         // Validate total pins (except for 10th frame)
-        if (frameNumber < BowlingGameConstants.MAX_ROLLS_LAST_FRAME) {
+        if (frameNumber < BowlingGameConstants.MAX_FRAMES) {
             int totalPins = rolls.stream()
                     .mapToInt(Roll::getPinsDroppedOut)
                     .sum();
             if (totalPins > BowlingGameConstants.MAX_PINS_PER_ROLL) {
                 throw new IllegalArgumentException(
-                        String.format("Total pins in frame %d cannot exceed %d", frameNumber, BowlingGameConstants.MAX_PINS_PER_ROLL));
+                        String.format("Total pins in frame %d cannot exceed %d", frameNumber,
+                                BowlingGameConstants.MAX_PINS_PER_ROLL));
             }
         }
 

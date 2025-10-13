@@ -2,9 +2,7 @@ package com.group.activities.bowling.entity.implementation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import com.group.activities.bowling.dto.BowlingGameDto;
 import com.group.activities.bowling.shared.BowlingGameConstants;
 import com.group.activities.bowling.shared.GameStatus;
 import com.group.activities.bowling.shared.GameType;
@@ -17,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,10 +40,12 @@ public class BowlingGame extends Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @NonNull
     @OneToMany(mappedBy = "bowlingGame", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("frameNumber ASC")
-    private List<Frame> frames = new ArrayList<>(); // Maximum of 10 frames in a game
+    private List<Frame> frames; // Maximum of 10 frames in a game
 
     private int totalScore;
 
@@ -58,9 +59,18 @@ public class BowlingGame extends Game {
      * Custom setter for frames with validation
      */
     public void setFrames(List<Frame> frames) {
-        this.frames = Optional.ofNullable(frames)
-                .map(ArrayList::new)
-                .orElseGet(ArrayList::new);
+        this.frames = frames != null ? new ArrayList<>(frames) : new ArrayList<>(); // Defensive Copy
+    }
+
+    
+    /**
+     * Custom getter for frames with validation
+     */
+    public List<Frame> getFrames() {
+        if (frames == null) {
+            frames = new ArrayList<>();
+        }
+        return new ArrayList<>(frames); // Defensive Copy
     }
 
     public BowlingGame(List<Frame> frames, int totalScore, GameStatus status, GameType gameType) {

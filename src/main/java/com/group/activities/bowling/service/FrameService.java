@@ -1,6 +1,7 @@
 package com.group.activities.bowling.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.group.activities.bowling.dto.FrameDto;
 import com.group.activities.bowling.entity.IRoll;
@@ -11,7 +12,7 @@ public interface FrameService {
 
     FrameDto getDtoFromFrame(Long id);
 
-    Frame getFrameFromDto(FrameDto dto);
+    Optional<Frame> getFrameFromDto(FrameDto dto);
 
     FrameDto createFrameFromDto(FrameDto frameDto);
 
@@ -22,5 +23,7 @@ public interface FrameService {
     int getBonusScore(Frame frame, IRoll roll);
 
     Frame addRollsToFrame(List<Roll> rolls, Frame frame);
+
+    List<Frame> getAllFrames();
 
 }

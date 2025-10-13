@@ -1,12 +1,13 @@
 package com.group.activities.bowling.service.implementation;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.group.activities.bowling.dto.FrameDto;
 import com.group.activities.bowling.entity.IRoll;
-import com.group.activities.bowling.entity.implementation.BowlingGame;
 import com.group.activities.bowling.entity.implementation.Frame;
 import com.group.activities.bowling.entity.implementation.Roll;
 import com.group.activities.bowling.mapper.FrameMapper;
@@ -15,25 +16,23 @@ import com.group.activities.bowling.repository.FrameRepository;
 import com.group.activities.bowling.service.FrameService;
 
 import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
+@Service
 public class FrameServiceImplementation implements FrameService {
 
-    private Roll roll;
-    private Frame frame;
-    private BowlingGame bowlingGame;
-    private FrameMapper frameMapper;
-    private FrameRepository frameRepository;
-    private BowlingGameRepository bowlingGameRepository;
-    
+    // private Roll roll;
+    // private Frame frame;
+    // private BowlingGame bowlingGame;
+    private final FrameMapper frameMapper;
+    private final FrameRepository frameRepository;
+    private final BowlingGameRepository bowlingGameRepository;
+
     @Override
-    public Frame getFrameFromDto(FrameDto dto) {
-        BowlingGame bowlingGame = bowlingGameRepository.findById(dto.getBowlingGameId())
-                .orElseThrow(() -> new EntityNotFoundException("Bowling Game not found"));
-        return frameMapper.toEntity(dto, bowlingGame);
+    @Transactional
+    public Optional<Frame> getFrameFromDto(FrameDto dto) {
+        return bowlingGameRepository.findById(dto.getBowlingGameId()).map(bowlingGame -> frameMapper.toEntity(dto, bowlingGame));
     }
 
     @Override
@@ -54,9 +53,13 @@ public class FrameServiceImplementation implements FrameService {
     @Override
     @Transactional
     public FrameDto createFrameFromDto(FrameDto frameDto) {
-        Frame frame = getFrameFromDto(frameDto);
+        Frame frame = getFrameFromDto(frameDto).orElseThrow(() -> new EntityNotFoundException("Could not create frame as Bowling Game not found"));
         frameRepository.save(frame);
-        return frameDto; // Placeholder for validation logic
+        return frameDto;
+    }
+
+    public List<Frame> getAllFrames() {
+        return frameRepository.findAll();
     }
 
     @Override

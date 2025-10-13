@@ -23,11 +23,12 @@ public class RollTest {
     private Frame frame;
     private static final AtomicLong idGenerator = new AtomicLong(35L);
     private BowlingGame bowlingGame;
+    List<Roll> rolls;
 
     @BeforeEach
     public void setUp() {
 
-        List<Roll> rolls = new ArrayList<>();
+        rolls = new ArrayList<Roll>();
         bowlingGame = new BowlingGame(new ArrayList<Frame>(), 0, GameStatus.IN_PROGRESS, GameType.BOWLING);
 
         frame = new Frame(rolls, 1, 0, 0, bowlingGame);
@@ -45,8 +46,10 @@ public class RollTest {
 
     @Test
     public void whenAddRollsToFrames_thenReturn() {
-        frame.getRolls().add(new Roll(3, 1, frame));
-        frame.getRolls().add(new Roll(6, 2, frame));
+        rolls.add(new Roll(3, 1, frame));
+        rolls.add(new Roll(6, 2, frame));
+        frame.setRolls(rolls);
+        // frame.getRolls().add();
 
         assertThat(frame.getRolls()).hasSize(2);
         assertThat(frame.getRolls().get(1).getPinsDroppedOut()).isEqualTo(6);
@@ -55,8 +58,9 @@ public class RollTest {
     @Test
     public void whenAFrameAssociatesWithARoll_thenValidateFrameAndRoll() {
         Frame associatedFrame = new Frame(new ArrayList<Roll>(), 1, 0, 0, bowlingGame);
-        associatedFrame.getRolls().add(roll);
-        associatedFrame.getRolls().add(new Roll(5, 1, associatedFrame));
+        rolls.add(roll);
+        rolls.add(new Roll(5, 1, associatedFrame));
+        associatedFrame.setRolls(rolls);
 
         assertThat(associatedFrame.getRolls()).hasSize(2);
 

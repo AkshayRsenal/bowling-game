@@ -43,7 +43,9 @@ public class BowlingSimulationServiceImplementation implements BowlingSimulation
                     continue; // Skip the extra roll in non-final frames
                 }
 
-                frame.getRolls().add(new Roll(pinsDroppedOut, rollNumber, frame));
+                // frame.getRolls().add(new Roll(pinsDroppedOut, rollNumber, frame));
+                rolls.add(new Roll(pinsDroppedOut, rollNumber, frame));
+                frame.setRolls(rolls);
             }
 
             simulationFrames.add(frame);

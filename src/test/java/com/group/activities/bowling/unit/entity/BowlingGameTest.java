@@ -4,10 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import com.group.activities.bowling.entity.implementation.BowlingGame;
 import com.group.activities.bowling.entity.implementation.Frame;
@@ -18,31 +19,37 @@ import com.group.activities.bowling.shared.GameType;
 
 public class BowlingGameTest {
 
+    @InjectMocks
     private BowlingGame bowlingGame;
-    private static final AtomicLong idGenerator = new AtomicLong(1);
+
+    @Mock
     private FrameServiceImplementation frameService;
+
     private Frame frame;
+
+    private List<Frame> frames;
 
     @BeforeEach
     public void setUp() {
         // Initialize a new BowlingGame instance before each test
-        List<Frame> frames = new ArrayList<>();
-        Long id = idGenerator.getAndIncrement();
-        bowlingGame = new BowlingGame(id, frames, 0, GameStatus.IN_PROGRESS, GameType.BOWLING);
-        frameService = new FrameServiceImplementation();
+        frames = new ArrayList<>();
+
+        bowlingGame = new BowlingGame(frames, 0, GameStatus.IN_PROGRESS, GameType.BOWLING);
+        // frameService = new FrameServiceImplementation();
         frame = new Frame(new ArrayList<Roll>(), 1, 0, 0,
                 new BowlingGame(1L, new ArrayList<Frame>(), 0, GameStatus.IN_PROGRESS, GameType.BOWLING));
+
     }
 
     // @Test
     // public void whenRollsAdded_thenAssertContains() {
-    //     // Example test case to check if rolls can be added
-    //     roll(3, 5, 6, 7, 8, 10);
+    // // Example test case to check if rolls can be added
+    // roll(3, 5, 6, 7, 8, 10);
 
-    //     assertThat(bowlingGame.getRolls())
-    //             .isNotNull()
-    //             .isNotEmpty()
-    //             .contains(5, 6);
+    // assertThat(bowlingGame.getRolls())
+    // .isNotNull()
+    // .isNotEmpty()
+    // .contains(5, 6);
     // }
 
     @Test
@@ -57,11 +64,11 @@ public class BowlingGameTest {
     void whenFramesAdded_thenAssertFramesCount() {
         // Example test case to check if frames can be added
         bowlingGame.setFrames(null);
-        
 
         assertThat(bowlingGame.getFrames()).isNotNull()
                 .isEmpty();
-        bowlingGame.getFrames().add(frame);
+        frames.add(frame);
+        bowlingGame.setFrames(frames);
         assertThat(bowlingGame.getFrames()).isNotEmpty();
     }
 
@@ -151,8 +158,8 @@ public class BowlingGameTest {
     // }
 
     // private void roll(int... arrayOfPinsOut) {
-    //     for (int pinsCount : arrayOfPinsOut) {
-    //         bowlingGame.roll(pinsCount);
-    //     }
+    // for (int pinsCount : arrayOfPinsOut) {
+    // bowlingGame.roll(pinsCount);
+    // }
     // }
 }

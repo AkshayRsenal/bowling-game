@@ -20,7 +20,6 @@ import com.group.activities.bowling.shared.GameType;
 public class FrameTest {
 
     private Frame frame;
-    private Roll roll;
     private static final AtomicLong idGenerator = new AtomicLong(54L);
     private List<Roll> rolls;
 
@@ -38,13 +37,21 @@ public class FrameTest {
     public void whenSingleFrame_ThenCheckMaxRollsExceeded() {
 
         Frame singleFrame = new Frame(rolls, 1, 0, 0, frame.getBowlingGame());
-        singleFrame.getRolls().add(new Roll(5, 1, singleFrame));
-        singleFrame.getRolls().add(new Roll(3, 2, singleFrame));
-        singleFrame.getRolls().add(new Roll(3, 2, singleFrame));
+        rolls.add(new Roll(5, 1, singleFrame));
+        rolls.add(new Roll(3, 2, singleFrame));
+        rolls.add(new Roll(3, 2, singleFrame));
+        
+        singleFrame.setRolls(rolls);
+
+        // singleFrame.getRolls().add(new Roll(5, 1, singleFrame));
+        // singleFrame.getRolls().add(new Roll(3, 2, singleFrame));
+        // singleFrame.getRolls().add(new Roll(3, 2, singleFrame));
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            singleFrame.getRolls().add(new Roll(3, 3, singleFrame));
+        rolls.add(new Roll(3, 2, singleFrame));
+            // singleFrame.getRolls().add(new Roll(3, 3, singleFrame));
         });
-        assertThat(thrown.getMessage()).isEqualTo("Frame %d can have maximum %d rolls", singleFrame.getFrameNumber(), BowlingGameConstants.MAX_ROLLS_PER_FRAME);
+        assertThat(thrown.getMessage()).isEqualTo("Frame %d can have maximum %d rolls", singleFrame.getFrameNumber(),
+                BowlingGameConstants.MAX_ROLLS_PER_FRAME);
 
     }
 
