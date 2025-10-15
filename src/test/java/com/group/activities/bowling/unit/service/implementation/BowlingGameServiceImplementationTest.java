@@ -27,7 +27,7 @@ public class BowlingGameServiceImplementationTest {
     public void setUp() {
         // Initialize a new BowlingGame instance before each test
         bowlingGame = new BowlingGame(1L, new ArrayList<Frame>(), 0, GameStatus.IN_PROGRESS, GameType.BOWLING);
-        bowlingGameServiceImplementation = new BowlingGameServiceImplementation(bowlingGame, null, null);
+        bowlingGameServiceImplementation = new BowlingGameServiceImplementation(bowlingGame, bowlingSimulationServiceImplementation, null);
         // Todo: Initialize the BowlingSimulationServiceImplementation with correct parameters
     }
 
