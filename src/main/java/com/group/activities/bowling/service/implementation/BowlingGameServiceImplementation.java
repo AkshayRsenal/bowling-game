@@ -45,11 +45,12 @@ public class BowlingGameServiceImplementation implements BowlingGameService {
 
     @Override
     public void startNewGame() {
-        frames = bowlingSimulationServiceImplementation.getSimulationFramesAndRollsInList();
+        bowlingGame = bowlingSimulationServiceImplementation.getSimulationOfBowlingGame();
     }
 
     @Override
     public int getCurrentScore() {
+        // Todo: Implement score calculation logic here
         return 0;
     }
 

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,15 +19,13 @@ import com.group.activities.bowling.shared.GameType;
 public class FrameTest {
 
     private Frame frame;
-    private static final AtomicLong idGenerator = new AtomicLong(54L);
     private List<Roll> rolls;
 
     @BeforeEach
     public void setUp() {
         // Initialize a new Frame instance before each test
         rolls = new ArrayList<>();
-        Long id = idGenerator.getAndIncrement();
-        BowlingGame bowlingGame = new BowlingGame(id, new ArrayList<Frame>(), 0, GameStatus.IN_PROGRESS,
+        BowlingGame bowlingGame = new BowlingGame(new ArrayList<Frame>(), 0, GameStatus.IN_PROGRESS,
                 GameType.BOWLING);
         frame = new Frame(rolls, 1, 0, 0, bowlingGame);
     }

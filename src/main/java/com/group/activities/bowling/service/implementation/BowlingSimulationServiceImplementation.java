@@ -26,7 +26,7 @@ public class BowlingSimulationServiceImplementation implements BowlingSimulation
     private final Random random = new Random();
 
     // Example method to start a new game
-    public List<Frame> getSimulationFramesAndRollsInList() {
+    public BowlingGame getSimulationOfBowlingGame() {
 
         List<Frame> simulationFrames = new ArrayList<>();
         bowlingGame = new BowlingGame(simulationFrames, 0, GameStatus.IN_PROGRESS, GameType.BOWLING);
@@ -45,13 +45,13 @@ public class BowlingSimulationServiceImplementation implements BowlingSimulation
 
                 // frame.getRolls().add(new Roll(pinsDroppedOut, rollNumber, frame));
                 rolls.add(new Roll(pinsDroppedOut, rollNumber, frame));
-                frame.setRolls(rolls);
             }
 
+            frame.setRolls(rolls);
             simulationFrames.add(frame);
         }
-        
-        return simulationFrames;
+
+        return bowlingGame;
     }
 
 }

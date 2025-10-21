@@ -62,7 +62,6 @@ public class BowlingGame extends Game {
         this.frames = frames != null ? new ArrayList<>(frames) : new ArrayList<>(); // Defensive Copy
     }
 
-    
     /**
      * Custom getter for frames with validation
      */
@@ -125,6 +124,7 @@ public class BowlingGame extends Game {
 
     /**
      * Validates that frames are in correct sequence (1-10)
+     * 
      * @throws IllegalStateException if frame sequence is invalid
      */
     private void validateFrameSequence() {

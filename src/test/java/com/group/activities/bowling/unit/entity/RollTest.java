@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,6 @@ public class RollTest {
 
     private Roll roll;
     private Frame frame;
-    private static final AtomicLong idGenerator = new AtomicLong(35L);
     private BowlingGame bowlingGame;
     List<Roll> rolls;
 
